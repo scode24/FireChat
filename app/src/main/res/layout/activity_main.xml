@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="code.myspace.firechat.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="80dp">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fire Chat"
+            android:textAlignment="center"
+            android:layout_margin="10dp"
+            android:textSize="35dp"
+            android:fontFamily="cursive"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to fire chat. Let's chat together."
+            android:textAlignment="center"
+        />
+
+        <Button
+            android:id="@+id/signInBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@android:dimen/app_icon_size"
+            android:background="@drawable/button_style"
+            android:text="Sign In with Google"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</LinearLayout>

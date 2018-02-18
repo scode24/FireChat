@@ -9,20 +9,48 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatlistActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser fireUser = mAuth.getCurrentUser();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
+
     ProgressDialog mProgressDialog;
+
+    MessageAdapter msgAdapter;
+    List<MessageData> msgList;
+    ListView listView;
+    MessageData msgData;
+
+    String loggedEmail;
+    String userEmail;
+    EditText msgText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +58,17 @@ public class ChatlistActivity extends AppCompatActivity {
         Intent intent = getIntent();
         TextView name = findViewById(R.id.userName);
         TextView email = findViewById(R.id.userEmail);
-        //ImageView imgView = findViewById(R.id.userPhoto);//intent.getStringExtra()
+        msgText = findViewById(R.id.msgText);
 
-        Toast.makeText(getApplicationContext(),intent.getStringExtra("name"),Toast.LENGTH_LONG).show();
+        loggedEmail = fireUser.getEmail();
+        userEmail = intent.getStringExtra("email");
+
+        msgList = new ArrayList<MessageData>();
+        msgAdapter = new MessageAdapter(this,R.layout.left_bubble,msgList);
+        msgAdapter.setLoggedEmail(loggedEmail);
+        msgAdapter.setUserEmail(userEmail);
+        listView = findViewById(R.id.msgListView);
+        listView.setAdapter(msgAdapter);
 
         name.setText(intent.getStringExtra("name"));
         email.setText(intent.getStringExtra("email"));
@@ -41,6 +77,46 @@ public class ChatlistActivity extends AppCompatActivity {
         task.execute(intent.getStringExtra("photoUrl"));
 
     }
+
+    public void onSendMsg(View v){
+
+        msgData = new MessageData(loggedEmail,userEmail,msgText.getText().toString(),"");
+        databaseReference.child("message_base").setValue(msgData);
+
+        databaseReference.child("message_base").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String s) {
+                if (snapshot.exists()){
+                    MessageData oneMsg = snapshot.getValue(MessageData.class);
+                    msgList.add(new MessageData(oneMsg.getSenderEmail(), oneMsg.getReceiverEmail(),oneMsg.getMsg(),oneMsg.getTime()));
+                    msgAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot snapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
+    }
+
 
 
     @SuppressLint("NewApi")
@@ -76,7 +152,6 @@ public class ChatlistActivity extends AppCompatActivity {
         }
     }
 
-
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
         try {
@@ -93,7 +168,6 @@ public class ChatlistActivity extends AppCompatActivity {
         }
         return bm;
     }
-
 
     private void showProgessBar(String msg){
         if (mProgressDialog == null) {

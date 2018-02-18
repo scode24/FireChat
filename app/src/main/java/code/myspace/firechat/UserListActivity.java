@@ -53,6 +53,7 @@ public class UserListActivity extends AppCompatActivity {
         user_data.setUserName(fireUser.getDisplayName());
         user_data.setPhotoUrl(fireUser.getPhotoUrl().toString());
 
+        // this is for setting value in database
         databaseReference.child("users").child(fireUser.getEmail().replace("@gmail.com","").replace(".","(&)")).setValue(user_data);
 
         super.onCreate(savedInstanceState);

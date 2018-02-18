@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <ListView
-            android:id="@+id/userListView"
+            android:id="@+id/msgListView"
             android:layout_width="wrap_content"
             android:layout_height="360dp"
             tools:layout_editor_absoluteX="0dp"
@@ -79,17 +79,22 @@
         tools:layout_editor_absoluteX="16dp">
 
         <EditText
-            android:layout_width="250dp"
-            android:layout_height="45dp"
+            android:id="@+id/msgText"
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/textbox_style"
-            android:hint="Type message..." />
+            android:hint="Type message..."
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/sendBtn"
             android:layout_width="100dp"
-            android:layout_height="45dp"
+            android:layout_height="38dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/button_style"
+            android:onClick="onSendMsg"
             android:text="Send"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

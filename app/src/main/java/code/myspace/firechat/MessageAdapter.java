@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -59,28 +61,36 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        //Toast.makeText(getContext(),msgList.get(position).getSenderEmail()+"   "+userEmail+"     "+loggedEmail,Toast.LENGTH_LONG).show();
+
         if(convertView == null){
-            //System.out.print("************1");
-            if(msgList.get(position).getSenderEmail().equals(userEmail) && msgList.get(position).getReceiverEmail().equals(loggedEmail)){
-                resourceId = R.layout.left_bubble;
-                resourceTxtId = R.id.left_msg_text;
-            }else if(msgList.get(position).getSenderEmail().equals(loggedEmail) && msgList.get(position).getReceiverEmail().equals(userEmail)){
+
+            if (msgList.get(position).getSenderEmail().equals(loggedEmail)) {
                 resourceId = R.layout.right_bubble;
                 resourceTxtId = R.id.right_msg_text;
             }
-            convertView = LayoutInflater.from(context).inflate(resourceId,null);
-            holder = new DataHolder();
-            holder.msgTxt = convertView.findViewById(resourceTxtId);
-            convertView.setTag(holder);
+
+            if (msgList.get(position).getSenderEmail().equals(userEmail)) {
+                resourceId = R.layout.left_bubble;
+                resourceTxtId = R.id.left_msg_text;
+            }
+
         }else{
-            //System.out.print("************2");
             holder = (DataHolder) convertView.getTag();
         }
 
+        convertView = LayoutInflater.from(context).inflate(resourceId,null);
+        holder = new DataHolder();
+        holder.msgTxt = convertView.findViewById(resourceTxtId);
+        convertView.setTag(holder);
+
+        ViewGroup.LayoutParams lp = holder.msgTxt.getLayoutParams();
+
+
         MessageData data = msgList.get(position);
-        //holder.photo.setImageResource(user.resId);
         holder.msgTxt.setText(data.getMsg());
         return convertView;
+
 
     }
 

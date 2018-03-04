@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -87,7 +88,6 @@ public class ChatlistActivity extends AppCompatActivity {
     }
 
     public void onSendMsg(View v){
-        Toast.makeText(getApplicationContext(),msgText.getText().toString().trim(),Toast.LENGTH_LONG).show();
 
         if(!msgText.getText().toString().trim().equals("")) {
             databaseReference.child("message_id").addChildEventListener(new ChildEventListener() {
@@ -95,14 +95,15 @@ public class ChatlistActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot snapshot, String s) {
                     if (snapshot.exists()) {
                         int msgId = Integer.parseInt(snapshot.getValue().toString()) + 1;
-                        //databaseReference.child("message_base").child(String.valueOf(msgId));
                         msgData = new MessageData(loggedEmail, userEmail, msgText.getText().toString(), "");
                         databaseReference.child("message_base").child(String.valueOf(msgId)).setValue(msgData);
                         databaseReference.child("message_id").child("value").setValue(String.valueOf(msgId));
-                        msgAdapter.notifyDataSetChanged();
+                        //msgAdapter.notifyDataSetChanged();
+                        InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                         toneG.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
                         msgText.setText("");
-                        //listView.setSelection(msgAdapter.getCount());
+
                     }
                 }
 
@@ -137,7 +138,11 @@ public class ChatlistActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 if (snapshot.exists()){
                     MessageData oneMsg = snapshot.getValue(MessageData.class);
-                    msgList.add(new MessageData(oneMsg.getSenderEmail(), oneMsg.getReceiverEmail(),oneMsg.getMsg(),oneMsg.getTime()));
+                    boolean cond1 = (oneMsg.getSenderEmail().equals(fireUser.getEmail()) && oneMsg.getReceiverEmail().equals(userEmail));
+                    boolean cond2 = (oneMsg.getReceiverEmail().equals(fireUser.getEmail()) && oneMsg.getSenderEmail().equals(userEmail));
+                    if(cond1 || cond2){
+                        msgList.add(new MessageData(oneMsg.getSenderEmail(), oneMsg.getReceiverEmail(), oneMsg.getMsg(), oneMsg.getTime()));
+                    }
                     msgAdapter.notifyDataSetChanged();
                 }
             }

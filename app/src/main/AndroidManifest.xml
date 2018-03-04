@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="code.myspace.firechat">
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -22,7 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserListActivity" />
-        <activity android:name=".ChatlistActivity"></activity>
+        <activity android:name=".ChatlistActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+        ></activity>
     </application>
 
 </manifest>

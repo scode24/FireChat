@@ -63,22 +63,6 @@ public class UserListActivity extends AppCompatActivity {
         customAdapter = new CustomAdapter(this,R.layout.user_row,userList);
         listView.setAdapter(customAdapter);
 
-        //userList.add(new UserData("test","Loading users...",""));
-        /*userList.add(new UserData(R.mipmap.ic_launcher_round,"Soumya Sankar","s@gmail.com"));
-        userList.add(new UserData(R.mipmap.ic_launcher_round,"Pratik Das","pratworld@gmail.com"));*/
-
-        /*
-        TextView name = v.findViewById(R.id.userName);
-                TextView email = v.findViewById(R.id.userEmail);
-                ImageView img = v.findViewById(R.id.userPhoto);
-                Users user = (Users)model;
-                name.setText(user.getUserName());
-                email.setText("test");
-
-
-         */
-        //customAdapter = new CustomAdapter(this,R.layout.user_row,userList);
-        //listView.setAdapter(customAdapter);
 
         showProgessBar("Loading users...");
         databaseReference.child("users").addChildEventListener(new ChildEventListener() {

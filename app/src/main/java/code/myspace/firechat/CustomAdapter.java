@@ -1,6 +1,7 @@
 package code.myspace.firechat;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by myspace on 12/18/2017.
@@ -33,12 +35,16 @@ public class CustomAdapter extends ArrayAdapter<UserData> {
     List<UserData> userList;
     DataHolder holder;
 
+    ProgressDialog mProgressDialog;
+
     public CustomAdapter(@NonNull Context context, int resource, @NonNull List<UserData> objects) {
         super(context, resource, objects);
 
         this.context = context;
         this.resourceId = resource;
         this.userList = objects;
+
+
     }
 
     static class DataHolder{
@@ -63,11 +69,16 @@ public class CustomAdapter extends ArrayAdapter<UserData> {
         }
 
         UserData user = userList.get(position);
-        //holder.photo.setImageResource(user.resId);
+        asyncTask task = new asyncTask();
+        try {
+            holder.photo.setImageBitmap(task.execute(user.photoUrl).get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         holder.name.setText(user.name);
         holder.email.setText(user.email);
-        asyncTask task = new asyncTask();
-        task.execute(user.photoUrl);
         return convertView;
 
     }
@@ -124,4 +135,5 @@ public class CustomAdapter extends ArrayAdapter<UserData> {
         }
         return bm;
     }
+
 }

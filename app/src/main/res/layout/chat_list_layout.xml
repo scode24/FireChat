@@ -8,21 +8,26 @@
     tools:context="code.myspace.firechat.ChatlistActivity">
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="0dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/msgListView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/userPhoto"
@@ -62,39 +67,52 @@
         <ListView
             android:id="@+id/msgListView"
             android:layout_width="wrap_content"
-            android:layout_height="360dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="80dp"></ListView>
-    </LinearLayout>
+            android:layout_height="0dp"
+            android:transcriptMode="alwaysScroll"
+            android:stackFromBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"></ListView>
+    </android.support.constraint.ConstraintLayout>
 
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp">
 
         <EditText
             android:id="@+id/msgText"
-            android:layout_width="245dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:background="@drawable/textbox_style"
             android:hint="Type message..."
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sendBtn"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/sendBtn"
-            android:layout_width="100dp"
-            android:layout_height="38dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="101dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/button_style"
             android:onClick="onSendMsg"
             android:text="Send"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/msgText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/msgText"
+            app:layout_constraintTop_toTopOf="@+id/msgText"
+            app:layout_constraintVertical_bias="1.0" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

@@ -10,6 +10,8 @@ public class MessageData {
     private String msg;
     private String time;
 
+    public MessageData(){}
+
     public MessageData(String senderEmail, String receiverEmail, String msg, String time) {
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;

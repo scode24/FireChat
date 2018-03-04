@@ -5,15 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,8 @@ public class ChatlistActivity extends AppCompatActivity {
     FirebaseUser fireUser = mAuth.getCurrentUser();
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
+
+    ToneGenerator toneG;
 
     ProgressDialog mProgressDialog;
 
@@ -76,13 +80,58 @@ public class ChatlistActivity extends AppCompatActivity {
         asyncTask task = new asyncTask();
         task.execute(intent.getStringExtra("photoUrl"));
 
+        toneG = new ToneGenerator(AudioManager.RINGER_MODE_NORMAL, 100);
+
+        showMessages();
+
     }
 
     public void onSendMsg(View v){
+        Toast.makeText(getApplicationContext(),msgText.getText().toString().trim(),Toast.LENGTH_LONG).show();
 
-        msgData = new MessageData(loggedEmail,userEmail,msgText.getText().toString(),"");
-        databaseReference.child("message_base").setValue(msgData);
+        if(!msgText.getText().toString().trim().equals("")) {
+            databaseReference.child("message_id").addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot snapshot, String s) {
+                    if (snapshot.exists()) {
+                        int msgId = Integer.parseInt(snapshot.getValue().toString()) + 1;
+                        //databaseReference.child("message_base").child(String.valueOf(msgId));
+                        msgData = new MessageData(loggedEmail, userEmail, msgText.getText().toString(), "");
+                        databaseReference.child("message_base").child(String.valueOf(msgId)).setValue(msgData);
+                        databaseReference.child("message_id").child("value").setValue(String.valueOf(msgId));
+                        msgAdapter.notifyDataSetChanged();
+                        toneG.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
+                        msgText.setText("");
+                        //listView.setSelection(msgAdapter.getCount());
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot snapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+            });
+        }
+
+    }
+
+    private void showMessages() {
         databaseReference.child("message_base").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String s) {
@@ -94,9 +143,7 @@ public class ChatlistActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot snapshot, String s) {
-
-            }
+            public void onChildChanged(DataSnapshot snapshot, String s) {}
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -114,9 +161,7 @@ public class ChatlistActivity extends AppCompatActivity {
             }
 
         });
-
     }
-
 
 
     @SuppressLint("NewApi")

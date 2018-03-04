@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -86,13 +85,12 @@ public class UserListActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String s) {
                 if (snapshot.exists()){
-/*                    if (!fireUser.getEmail().equals(snapshot.getKey().replace("(&)", ".") + "@gmail.com")) {
-                        Users oneUser = snapshot.getValue(Users.class);
-                        userList.add(new UserData(oneUser.getPhotoUrl(), oneUser.getUserName(), snapshot.getKey().replace("(&)", ".") + "@gmail.com"));
-                    }*/
                     Users oneUser = snapshot.getValue(Users.class);
-                    userList.add(new UserData(oneUser.getPhotoUrl(), oneUser.getUserName(), snapshot.getKey().replace("(&)", ".") + "@gmail.com"));
-                    customAdapter.notifyDataSetChanged();
+                    String usrEmail = snapshot.getKey().replace("(&)", ".") + "@gmail.com";
+                    if (!usrEmail.equals(fireUser.getEmail())) {
+                        userList.add(new UserData(oneUser.getPhotoUrl(), oneUser.getUserName(), snapshot.getKey().replace("(&)", ".") + "@gmail.com"));
+                        customAdapter.notifyDataSetChanged();
+                    }
                     mProgressDialog.dismiss();
                 } else {
                     mProgressDialog.dismiss();

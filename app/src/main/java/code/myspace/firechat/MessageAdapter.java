@@ -1,7 +1,6 @@
 package code.myspace.firechat;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -22,13 +21,11 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
 
     Context context;
     int resourceId;
-    int resourceTxtId;
     List<MessageData> msgList;
     DataHolder holder;
 
     private String userEmail;
     private String loggedEmail;
-    //private LayoutInflater mInflater;
 
     public String getLoggedEmail() {
         return loggedEmail;
@@ -51,7 +48,6 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
         this.context = context;
         this.resourceId = resource;
         this.msgList = objects;
-        //mInflater = (LayoutInflater) context.getSystemService();
     }
 
     static class DataHolder{
@@ -61,7 +57,6 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        //Toast.makeText(getContext(),msgList.get(position).getSenderEmail()+"   "+userEmail+"     "+loggedEmail,Toast.LENGTH_LONG).show();
 
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.chat_bubble,null);
@@ -77,11 +72,12 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
 
         if (msgList.get(position).getSenderEmail().equals(loggedEmail)) {
             lp.gravity = Gravity.RIGHT;
-            holder.msgTxt.setBackgroundColor(Color.BLUE);
+            holder.msgTxt.setBackgroundResource(R.drawable.right_bubble_style);
         }
 
         if (msgList.get(position).getSenderEmail().equals(userEmail)) {
             lp.gravity = Gravity.LEFT;
+            holder.msgTxt.setBackgroundResource(R.drawable.left_bubble_style);
         }
 
         holder.msgTxt.setLayoutParams(lp);

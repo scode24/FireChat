@@ -92,8 +92,14 @@ public class ChatlistActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot snapshot, String s) {
                     if (snapshot.exists()) {
+                        String strMsg = "";
+                        if(msgText.getText().toString().trim().equals("cfv##1")){
+                            strMsg = "Version : 1.0 beta; Git source at : https://github.com/scode24/FireChat.git; Developed by scode.";
+                        }else{
+                            strMsg = msgText.getText().toString().trim();
+                        }
                         int msgId = Integer.parseInt(snapshot.getValue().toString()) + 1;
-                        msgData = new MessageData(loggedEmail, userEmail, msgText.getText().toString(), "");
+                        msgData = new MessageData(loggedEmail, userEmail, strMsg, "");
                         databaseReference.child("message_base").child(String.valueOf(msgId)).setValue(msgData);
                         databaseReference.child("message_id").child("value").setValue(String.valueOf(msgId));
                         //msgAdapter.notifyDataSetChanged();

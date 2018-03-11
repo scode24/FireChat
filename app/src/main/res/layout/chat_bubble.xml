@@ -17,7 +17,7 @@
             android:id="@+id/left_msg_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/left_bubble"
+            android:background="@drawable/right_bubble_style"
             android:text="Hi you there"
             android:textColor="@color/lightText" />
 

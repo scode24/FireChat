@@ -83,12 +83,6 @@ public class CustomAdapter extends ArrayAdapter<UserData> {
 
     }
 
- /*   public void refreshEvents(List<UserData> newData) {
-        this.userList.clear();
-        this.userList.addAll(newData);
-        notifyDataSetChanged();
-    }*/
-
     private class asyncTask extends AsyncTask<String,Void,Bitmap> {
 
         private String resp;

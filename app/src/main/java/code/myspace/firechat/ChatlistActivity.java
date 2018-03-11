@@ -105,7 +105,7 @@ public class ChatlistActivity extends AppCompatActivity {
                         //msgAdapter.notifyDataSetChanged();
                         InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                        toneG.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
+                        toneG.startTone(ToneGenerator.TONE_DTMF_S, 200);
                         msgText.setText("");
 
                     }

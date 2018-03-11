@@ -1,16 +1,16 @@
 package code.myspace.firechat;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import java.util.List;
 
@@ -64,28 +64,27 @@ public class MessageAdapter extends ArrayAdapter<MessageData> {
         //Toast.makeText(getContext(),msgList.get(position).getSenderEmail()+"   "+userEmail+"     "+loggedEmail,Toast.LENGTH_LONG).show();
 
         if(convertView == null){
-
-            if (msgList.get(position).getSenderEmail().equals(loggedEmail)) {
-                resourceId = R.layout.right_bubble;
-                resourceTxtId = R.id.right_msg_text;
-            }
-
-            if (msgList.get(position).getSenderEmail().equals(userEmail)) {
-                resourceId = R.layout.left_bubble;
-                resourceTxtId = R.id.left_msg_text;
-            }
+            convertView = LayoutInflater.from(context).inflate(R.layout.chat_bubble,null);
+            holder = new DataHolder();
+            holder.msgTxt = convertView.findViewById(R.id.left_msg_text);
+            convertView.setTag(holder);
 
         }else{
             holder = (DataHolder) convertView.getTag();
         }
 
-        convertView = LayoutInflater.from(context).inflate(resourceId,null);
-        holder = new DataHolder();
-        holder.msgTxt = convertView.findViewById(resourceTxtId);
-        convertView.setTag(holder);
+        LayoutParams lp = (LayoutParams) holder.msgTxt.getLayoutParams();
 
-        ViewGroup.LayoutParams lp = holder.msgTxt.getLayoutParams();
+        if (msgList.get(position).getSenderEmail().equals(loggedEmail)) {
+            lp.gravity = Gravity.RIGHT;
+            holder.msgTxt.setBackgroundColor(Color.BLUE);
+        }
 
+        if (msgList.get(position).getSenderEmail().equals(userEmail)) {
+            lp.gravity = Gravity.LEFT;
+        }
+
+        holder.msgTxt.setLayoutParams(lp);
 
         MessageData data = msgList.get(position);
         holder.msgTxt.setText(data.getMsg());

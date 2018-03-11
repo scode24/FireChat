@@ -11,14 +11,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,7 +67,7 @@ public class ChatlistActivity extends AppCompatActivity {
         userEmail = intent.getStringExtra("email");
 
         msgList = new ArrayList<MessageData>();
-        msgAdapter = new MessageAdapter(this,R.layout.left_bubble,msgList);
+        msgAdapter = new MessageAdapter(this,R.layout.chat_bubble,msgList);
         msgAdapter.setLoggedEmail(loggedEmail);
         msgAdapter.setUserEmail(userEmail);
         listView = findViewById(R.id.msgListView);
